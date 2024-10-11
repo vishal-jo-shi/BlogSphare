@@ -6,7 +6,6 @@ const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
-const mongoDB = require('../database/db')
 router.post('/blogdata',(req,res)=>{
   try {
       mongoDB();
