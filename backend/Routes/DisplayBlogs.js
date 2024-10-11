@@ -1,13 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Blogs = require('../models/Blogs');
-const {mongoDB} = require('../database/db');
+const mongoDB = require('../database/db');
 const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
 const mongoDB = require('../database/db')
-const { fetchData } = require('../database/fetchData');
 router.post('/blogdata',(req,res)=>{
   try {
       mongoDB();
