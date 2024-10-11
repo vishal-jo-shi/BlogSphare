@@ -31,7 +31,3 @@ app.use((req,res,next)=>{
   app.use('/api',require("./Routes/DisplayProfiles"))
   app.use('/api',require("./middleware/uploads"))
   app.use('/images', express.static('uploads'));
-  
-app.listen(process.env.PORT,()=>{
-    console.log(`App listining on port ${process.env.PORT}`)
-})
