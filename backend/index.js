@@ -2,7 +2,7 @@ const express = require('express')
 const mongoDB = require('./database/db')
 const app = express()
 mongoDB();
-app.post('/',(req,res)=>{
+app.get('/',(req,res)=>{
     res.send("Hello Worldd!")
 })
 
