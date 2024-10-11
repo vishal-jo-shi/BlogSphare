@@ -13,7 +13,7 @@ router.post('/blogdata',async(req,res)=>{
         res.send([data.blogs, data.categories]); // Send the data as a response
     } catch (error) {
         console.error(error.message);
-        res.send("Server Error")
+        res.status(500).json({ error: 'Server Error', details: error.message });
     }
 })
 router.post('/myblogs', async (req, res) => {
