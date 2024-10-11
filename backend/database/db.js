@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 require('dotenv').config();
 const mongoDB = async () => {
     try {
-         await mongoose.connect(process.env.MONGO_URL, {serverSelectionTimeoutMS: 5000});
+         await mongoose.connect(process.env.MONGO_URL);
         console.log('Connected to MongoDB')
         const fetch_blogs = mongoose.connection.db.collection("blogs")
         global.blogs=await fetch_blogs.find().toArray();
