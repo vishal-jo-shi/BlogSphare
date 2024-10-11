@@ -1,13 +1,7 @@
 // db.js
 const mongoose = require('mongoose');
 
-let isConnected; // Variable to track connection status
-
 const mongoDB = async () => {
-    if (isConnected) {
-        return; // Return if already connected
-    }
-    
     try {
         await mongoose.connect(process.env.MONGO_URL);
         isConnected = true; // Update connection status
