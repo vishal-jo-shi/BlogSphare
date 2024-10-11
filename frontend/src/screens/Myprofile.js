@@ -39,7 +39,7 @@ export default function MyProfile() {
     const email = localStorage.getItem('userEmail');
     
     // Fetch blog data
-    let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/myblogs`, {
+    let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myblogs`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -50,7 +50,7 @@ export default function MyProfile() {
     setBlogData(res[0]);
     setBlogCat(res[1]);
     // Fetch profile data
-    response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/myprofiledata`, {
+    response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export default function MyProfile() {
     formData.append('email', email);
     formData.append('image', file);
     
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/upload`, { method: 'POST', body: formData });
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, { method: 'POST', body: formData });
     
     if (response.ok) {
       const responseData = await response.json();
@@ -128,7 +128,7 @@ export default function MyProfile() {
       profilePic: profilePicPath,
     };
 
-    await fetch(`${process.env.REACT_APP_BACKEND_URL}api/updateprofile`, {
+    await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updateprofile`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -147,7 +147,7 @@ export default function MyProfile() {
     setShowFollowers(true)
     const followerEmails = profileData.follower || []; // Get the following email list
               if (followerEmails && followerEmails.length > 0) {
-                const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followerProfiles`, {
+                const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/followerProfiles`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',
@@ -162,7 +162,7 @@ export default function MyProfile() {
     setShowFollowing(true)
     const followingEmails = profileData.following || []; // Get the following email list
               if (followingEmails && followingEmails.length > 0) {
-                const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followingProfiles`, {
+                const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/followingProfiles`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

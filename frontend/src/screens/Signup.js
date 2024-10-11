@@ -10,7 +10,7 @@ export default function Signup() {
   const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/createuser`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/createuser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

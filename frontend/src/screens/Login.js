@@ -23,7 +23,7 @@ export default function Login() {
   
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
-    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/loginuser`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/loginuser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'

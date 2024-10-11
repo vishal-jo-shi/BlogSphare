@@ -44,7 +44,7 @@ export default function FollowerFollowing(props) {
       }
       setIsFollowing(!isFollowing);
 
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followfollowing`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/followfollowing`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
