@@ -1,12 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../models/Profile');
-const {mongoDB} = require('../database/db')
+const mongoDB = require('../database/db')
 const path = require('path');
 const fs = require('fs');
 router.post('/usersprofile', async (req, res) => {
     try {
-        await mongoDB(); // Ensure the database connection is established
+        mongoDB(); // Ensure the database connection is established
         const email = req.body.email;
         const profiles = await Profile.find({ email: { $ne: email } }); // Fetch all profiles except the one with the specified email
         res.json(profiles); // Send the filtered profiles back as a response
@@ -18,7 +18,7 @@ router.post('/usersprofile', async (req, res) => {
 
 router.post('/myprofiledata', async (req, res) => {
     try {
-        await mongoDB(); // Connect to your database
+        mongoDB(); // Connect to your database
         const email  = req.body.email; // Get the email from the request body
 
         if (!email) {

@@ -6,26 +6,28 @@ const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
+const mongoDB = require('../database/db')
 const { fetchData } = require('../database/fetchData');
-router.post('/blogdata',async(req,res)=>{
-    try {
-        const data = await fetchData(); // Fetch the data
-        res.send([data.blogs, data.categories]); // Send the data as a response
-    } catch (error) {
-        console.error(error.message);
-        res.status(500).json({ error: 'Server Error', details: error.message });
-    }
+router.post('/blogdata',(req,res)=>{
+  try {
+      mongoDB();
+      res.send([global.blogs,global.blogsCat]);
+  } catch (error) {
+      console.error(error.message);
+      res.send("Server Error")
+  }
 })
+
+
 router.post('/myblogs', async (req, res) => {
   try {
-      const { blogs, blogsCat } = await fetchData(); // Fetch the latest data
-      const userBlogs = blogs.filter(blog => blog.email === req.body.email); // Filter blogs by email
-      res.json([userBlogs, blogsCat]); // Return the filtered blogs and categories
+    mongoDB();
+    const blogs = global.blogs.filter(blog => blog.email === req.body.email);
+    res.json([blogs, global.blogsCat]);
   } catch (error) {
-      res.status(500).json({ error: 'Server Error', details: error.message });
+    res.status(500).json({ error: 'Server Error', details: error.message })
   }
 });
-
 
 router.post('/createblog',async(req,res)=>{
   try {

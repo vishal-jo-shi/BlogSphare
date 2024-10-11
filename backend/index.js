@@ -1,12 +1,9 @@
 const express = require('express')
-const {mongoDB} = require('./database/db')
+const mongoDB = require('./database/db')
 require('dotenv').config();
 const app = express()
 
-mongoDB().catch((error) => {
-  console.error('Failed to connect to MongoDB:', error);
-  process.exit(1); // Exit process if connection fails
-});
+mongoDB()
 
 
 app.use((req,res,next)=>{

@@ -1,9 +1,10 @@
 const express = require('express')
 const router = express.Router()
 const Comments = require('../models/Comments');
-
+const mongoDB = require('../database/db')
 router.post('/commentdata', async (req, res) => {
     try {
+        mongoDB();
         const blogId  = req.body.id; // Get the blog ID from the request body
         if (!blogId) {
             return res.status(400).json({ message: "Blog ID is required" }); // Handle missing Blog ID
