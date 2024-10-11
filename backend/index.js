@@ -3,7 +3,11 @@ const {mongoDB} = require('./database/db')
 require('dotenv').config();
 const app = express()
 
-mongoDB();
+mongoDB().catch((error) => {
+  console.error('Failed to connect to MongoDB:', error);
+  process.exit(1); // Exit process if connection fails
+});
+
 
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONTEND_URL}`);
