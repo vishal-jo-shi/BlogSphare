@@ -1,18 +1,21 @@
+// db.js
 const mongoose = require('mongoose');
-require('dotenv').config();
+
+let isConnected; // Variable to track connection status
+
 const mongoDB = async () => {
+    if (isConnected) {
+        return; // Return if already connected
+    }
+    
     try {
-         await mongoose.connect(process.env.MONGO_URL);
-        console.log('Connected to MongoDB')
-        const fetch_blogs = mongoose.connection.db.collection("blogs")
-        global.blogs=await fetch_blogs.find().toArray();
-        const fetch_cat = mongoose.connection.db.collection("blog_category");
-        global.blogsCat=await fetch_cat.find().toArray();
-        const fetch_cmt = mongoose.connection.db.collection("comments");
-        global.blogsCmt=await fetch_cmt.find().toArray();
+        await mongoose.connect(process.env.MONGO_URL);
+        isConnected = true; // Update connection status
+        console.log('Connected to MongoDB');
     } catch (error) {
-        console.log('Connection failed', error)
+        console.log('Connection failed', error);
+        throw error; // Throw error to handle it in the calling function
     }
 };
 
-module.exports = mongoDB;
+module.exports = { mongoDB, mongoose };

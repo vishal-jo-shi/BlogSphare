@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Profile = require('../models/Profile');
-const mongoDB = require('../database/db')
+const {mongoDB} = require('../database/db')
 const path = require('path');
 const fs = require('fs');
 router.post('/usersprofile', async (req, res) => {
@@ -18,7 +18,7 @@ router.post('/usersprofile', async (req, res) => {
 
 router.post('/myprofiledata', async (req, res) => {
     try {
-        mongoDB(); // Connect to your database
+        await mongoDB(); // Connect to your database
         const email  = req.body.email; // Get the email from the request body
 
         if (!email) {

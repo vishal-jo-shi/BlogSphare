@@ -59,7 +59,7 @@ export default function MyProfile() {
     });
     res = await response.json();
     setProfileData(res[0]);
-
+    console.log()
     // Set initial editData to current profile data
     setEditData({
       username: res[0].username || '',
@@ -135,7 +135,6 @@ export default function MyProfile() {
       },
       body: JSON.stringify({ email: email, data: updatedProfileData }),
     });
-
     loadData(); // Reload data after update
     setEditView(false); // Close the modal
   };
@@ -147,7 +146,7 @@ export default function MyProfile() {
   const handleShowFollowers = async() => {
     setShowFollowers(true)
     const followerEmails = profileData.follower || []; // Get the following email list
-              if (followerEmails.length > 0) {
+              if (followerEmails && followerEmails.length > 0) {
                 const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followerProfiles`, {
                   method: 'POST',
                   headers: {
@@ -162,7 +161,7 @@ export default function MyProfile() {
   const handleShowFollowing = async() => {
     setShowFollowing(true)
     const followingEmails = profileData.following || []; // Get the following email list
-              if (followingEmails.length > 0) {
+              if (followingEmails && followingEmails.length > 0) {
                 const responseProfiles = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followingProfiles`, {
                   method: 'POST',
                   headers: {
@@ -349,7 +348,7 @@ export default function MyProfile() {
                 {showFollowers && (
                   <Modal onClose={handleCloseFollowers} width="360px" height="500px"> {/* Set your desired width here */}
                       <h5>Followers:</h5>
-                      {followerProfiles.length > 0 ? (
+                      {followerProfiles && followerProfiles.length > 0 ? (
                           <div className="row">
                               {followerProfiles.map(profile => (
                                   <div className="col-12" key={profile._id}> {/* Only one per row */}
@@ -369,7 +368,7 @@ export default function MyProfile() {
                 {showFollowing && (
                     <Modal onClose={handleCloseFollowing} width="360px" height="500px">
                       <h5>Followings:</h5>
-                      {followingProfiles.length > 0 ? (
+                      {followingProfiles && followingProfiles.length > 0 ? (
                         <div className="row">
                           {followingProfiles.map(profile => (
                             <div className="col-12 " key={profile._id}>
@@ -387,13 +386,13 @@ export default function MyProfile() {
           <h5 className="text-center w-100">Blogs</h5>
           <hr />
           <div className="container">
-            {blogCat.length > 0 ? (
+            {blogCat && blogCat.length > 0 ? (
               blogCat.map((data) => {
                 // Filter blogs by category 
                 const filteredBlogs = blogData.filter(blog => blog.categoryName === data.categoryName);
 
                 // Check if there are filtered blogs
-                if (filteredBlogs.length > 0) {
+                if (filteredBlogs && filteredBlogs.length > 0) {
                   return (
                     <div className="row mb-3" key={data._id}>
                       <div className="fs-3 mt-1">{data.categoryName}</div>
