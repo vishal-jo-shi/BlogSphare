@@ -8,9 +8,8 @@ mongoDB();
 app.get('/',(req,res)=>{
     res.send("Hello Worldd!")
 })
-const router = express.Router();
 //testing
-router.get('/blogs', async (req, res) => {
+app.get('/blogs', async (req, res) => {
   try {
       const blogs = await fetchBlogs();
       res.json(blogs);
@@ -19,7 +18,7 @@ router.get('/blogs', async (req, res) => {
   }
 });
 
-router.get('/categories', async (req, res) => {
+app.get('/categories', async (req, res) => {
   try {
       const categories = await fetchCategories();
       res.json(categories);
@@ -28,7 +27,7 @@ router.get('/categories', async (req, res) => {
   }
 });
 
-router.get('/comments', async (req, res) => {
+app.get('/comments', async (req, res) => {
   try {
       const comments = await fetchComments();
       res.json(comments);
