@@ -5,7 +5,9 @@ const app = express()
 
 mongoDB()
 
-
+app.get('/',(req,res)=>{
+  res.send("Hello Worldd!")
+})
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONTEND_URL}`);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -20,9 +22,7 @@ app.use((req,res,next)=>{
     );
     next();
   })
-  app.get('/',(req,res)=>{
-    res.send("Hello Worldd!")
-})
+  
   app.use(express.json())
   app.use(express.urlencoded({ extended: true })); 
   app.use('/api',require("./Routes/CreateUser"))
