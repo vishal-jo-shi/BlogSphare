@@ -12,7 +12,7 @@ export default function FollowerFollowing(props) {
   };
 
   const loadData = async () => {
-    const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
+    const profileResponse = await fetch(`${import.meta.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
