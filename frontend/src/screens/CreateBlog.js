@@ -45,7 +45,7 @@ export default function CreateBlog() {
     formData.append('email', email);
     formData.append('image', file);
     
-    const response = await fetch(`${process.env.BACKEND_URL}/api/upload`, { method: 'POST', body: formData });
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, { method: 'POST', body: formData });
     
     if (response.ok) {
       const responseData = await response.json();
@@ -87,7 +87,7 @@ export default function CreateBlog() {
         email: userEmail,
       };
 
-      const response = await fetch(`${process.env.BACKEND_URL}/api/createblog`, {
+      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/createblog`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(blogData)

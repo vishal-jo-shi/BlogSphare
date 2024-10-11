@@ -31,7 +31,6 @@ export default function Modal({ children, onClose, width,height }) { // <-- Add 
     if (!targetElement) {
         return null; // or handle the case where the element doesn't exist
     }
-    console.log(width,height)
     return ReactDOM.createPortal(
         <>
             <div style={OVERLAY_STYLES} />

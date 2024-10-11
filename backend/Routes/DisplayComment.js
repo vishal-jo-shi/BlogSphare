@@ -87,7 +87,7 @@ router.post('/updatecomment', async (req, res) => {
 
       const deletedcomment = await Comments.findByIdAndDelete(commentId);
       if(deletedcomment){
-        console.log("deleted comment",deletedcomment)
+        console.log("deleted comment")
       }
       if (deletedcomment) {
         res.status(200).json({ message: 'Comment deleted successfully', comment: deletedcomment });

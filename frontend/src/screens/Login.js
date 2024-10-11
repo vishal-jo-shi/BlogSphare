@@ -6,20 +6,24 @@ export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
+
   let navigate = useNavigate();
   const location = useLocation();
   useEffect(() => {
     const message = location.state?.message;
+
     if (message) {
-      setErrorMessage(message);
-      setShowModal(true)
-      console.log(message)
+        setErrorMessage(message);
+        setShowModal(true);
+
+        // Clear the location state after showing the modal
+        navigate(location.pathname, { replace: true });
     }
-  }, [location.state]);
+}, [location.state, navigate]);
   
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent the default form submission
-    const response = await fetch(`${process.env.BACKEND_URL}/api/loginuser`, {
+    const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/loginuser`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
