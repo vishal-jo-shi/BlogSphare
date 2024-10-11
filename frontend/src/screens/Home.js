@@ -12,7 +12,7 @@ export default function Home() {
   const isMobile = useMediaQuery({ query: '(max-width: 570px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 570px)' });
   const loadData = async () => {
-    let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/blogdata`, {
+    let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/blogdata`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
