@@ -11,21 +11,30 @@ export default function Home() {
   const isDtop = useMediaQuery({ query: '(min-width: 768px)' });
   const isMobile = useMediaQuery({ query: '(max-width: 570px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 570px)' });
+  
+  
   const loadData = async () => {
     try {
-    let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/blogdata`, {
-      method: "POST",
-      headers: {
-        'Content-Type': 'application/json'
+      let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/blogdata`, {
+        method: "POST",
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+      // Ensure that the fetch was successful
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    });
+      // Parse the response as JSON
+      const data = await response.json();
+      // Assuming data[0] is blog data and data[1] is blog category
+      setBlogData(data[0]);
+      setBlogCat(data[1]);
     } catch (error) {
-    console.error('Error fetching profiles:', error);
+      console.error('Error fetching blog data:', error);
     }
-    response = await response.json();
-    setBlogData(response[0]);
-    setBlogCat(response[1]);
   };
+  
 
   useEffect(() => {
     loadData();
