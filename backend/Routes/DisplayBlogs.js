@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Blogs = require('../models/Blogs');
+const {mongoDB} = require('../database/db');
 const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
@@ -12,7 +13,7 @@ router.post('/blogdata',async(req,res)=>{
         res.send([data.blogs, data.categories]); // Send the data as a response
     } catch (error) {
         console.error(error.message);
-        res.status(500).json({ error: 'Server Error', details: error.message });
+        res.send("Server Error")
     }
 })
 router.post('/myblogs', async (req, res) => {
