@@ -43,7 +43,7 @@ router.post('/createuser', [
             email: user.email,
             username: user.username,
             bio: '',
-            profilePic: 'http://localhost:3000/Image/default_profile.jpeg',
+            profilePic: `${process.env.FRONTEND_URL}/Image/default_profile.jpeg`,
             blogs: [],
             follower: [],
             following: []

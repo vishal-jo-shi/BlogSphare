@@ -1,6 +1,6 @@
 const express = require('express')
 const mongoDB = require('./database/db')
-
+require('dotenv').config(); // Load .env file
 const app = express()
 mongoDB();
 app.post('/',(req,res)=>{

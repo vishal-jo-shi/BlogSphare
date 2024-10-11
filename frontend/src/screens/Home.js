@@ -12,13 +12,14 @@ export default function Home() {
   const isMobile = useMediaQuery({ query: '(max-width: 570px)' });
   const isDesktop = useMediaQuery({ query: '(min-width: 570px)' });
   const loadData = async () => {
-    let response = await fetch('http://localhost:4000/api/blogdata', {
+    let response = await fetch(`${process.env.BACKEND_URL}/api/blogdata`, {
       method: "POST",
       headers: {
         'Content-Type': 'application/json'
       }
     });
     response = await response.json();
+    console.log(response)
     setBlogData(response[0]);
     setBlogCat(response[1]);
   };

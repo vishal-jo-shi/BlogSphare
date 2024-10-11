@@ -12,7 +12,7 @@ export default function Creators() {
         const fetchProfiles = async () => {
           const email = localStorage.getItem("userEmail")
             try {
-              const response = await fetch("http://localhost:4000/api/usersprofile", {
+              const response = await fetch(`${process.env.BACKEND_URL}/api/usersprofile`, {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',

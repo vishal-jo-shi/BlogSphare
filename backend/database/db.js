@@ -10,7 +10,6 @@ const mongoDB = async () => {
         global.blogsCat=await fetch_cat.find().toArray();
         const fetch_cmt = mongoose.connection.db.collection("comments");
         global.blogsCmt=await fetch_cmt.find().toArray();
-        console.log(global.blogsCat,global.blogs,global.blogsCmt)
     } catch (error) {
         console.log('Connection failed', error)
     }
