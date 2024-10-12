@@ -1,26 +1,17 @@
 const express = require('express')
 const router = express.Router()
 const Blogs = require('../models/Blogs');
-const mongoDB = require('../database/db');
 const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
-const { MongoClient } = require('mongodb');
-const client = new MongoClient(process.env.MONGODB_URI, {
-  serverSelectionTimeoutMS: 20000, // Increase timeout to 20 seconds
-});
-const connectDB = async () => {
-  if (!client.isConnected()) {
-      await client.connect();
-  }
-};
+const  clientPromise = require ('../database/db');
+
 router.post('/blogdata',async(req,res)=>{
   try {
-      await connectDB(); // Ensure the database is connected
-
+    const mongoClient =  await clientPromise;
       // Access the database
-      const db = client.db('mydatabase'); // Specify your database name here
+      const db = mongoClient.db('mydatabase'); // Specify your database name here
       // Access collections
       const blogsCollection = db.collection("blogs");
       const blogsCatCollection = db.collection("blog_category");
@@ -38,12 +29,11 @@ router.post('/blogdata',async(req,res)=>{
 })
 
 
-router.post('/myblogs', async (req, res) => {
+router.get('/myblogs', async (req, res) => {
   try {
-    await connectDB(); // Ensure the database is connected
-
+    const mongoClient =  await clientPromise;
     // Access the database
-    const db = client.db('mydatabase'); // Specify your database name here
+    const db = mongoClient.db('mydatabase'); // Specify your database name here
 
     // Access collections
     const blogsCollection = db.collection("blogs");

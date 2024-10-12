@@ -1,24 +1,24 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-const mongoDB = async () => {
-    const client = new MongoClient(process.env.MONGODB_URI, {
-        serverSelectionTimeoutMS: 20000 // Increase timeout to 20 seconds
-    });
+const uri = process.env.MONGODB_URI
+const options = {}
+ let client ,clientPromise
 
-    try {
-        // Connect to MongoDB
-        await client.connect();
-        console.log('Connected to MongoDB');
-    } catch (error) {
-        // Log the custom error messages
-        console.error('Connection or collection access failed:', error.message);
-        // You can also log the full error object if needed
-        console.error(error);
-    } finally {
-        // Ensure the client is closed
-        await client.close();
-    }
-};
+ if(!process.env.MONGODB_URI){
+    throw new Error('Please add you Mongo URI to .env')
+ }
 
-module.exports = mongoDB;
+ if(process.env.NODE_ENV==='development'){
+        if(!global._mongoClientPromise){
+            client = new MongoClient(uri,options)
+            global._mongoClientPromise = client.connect()
+        }
+        clientPromise=global._mongoClientPromise
+ }else{
+    client = new MongoClient(uri,options)
+    clientPromise = client.connect()
+ }
+ console.log("just connected")
+
+ module.exports= clientPromise

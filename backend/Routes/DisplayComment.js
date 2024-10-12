@@ -1,16 +1,21 @@
 const express = require('express')
 const router = express.Router()
 const Comments = require('../models/Comments');
-const mongoDB = require('../database/db')
+const  clientPromise = require ('../database/db');
+
 router.post('/commentdata', async (req, res) => {
     try {
-        mongoDB();
+      const mongoClient =  await clientPromise;
+      // Access the database
+      const db = mongoClient.db('mydatabase'); // Specify your database name here
+      // Access collections
+      const commentsCollection = db.collection("comments");
         const blogId  = req.body.id; // Get the blog ID from the request body
         if (!blogId) {
             return res.status(400).json({ message: "Blog ID is required" }); // Handle missing Blog ID
         }
         // Find all comments with the same blogId
-        const comments = await Comments.find({ blogId: blogId });
+        const comments = await commentsCollection.find({ blogId: blogId }).toArray();
         res.json(comments); // Send the comments back as a response
     } catch (error) {
         console.error(error.message);

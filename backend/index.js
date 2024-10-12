@@ -1,12 +1,7 @@
 const express = require('express');
-const mongoDB = require('./database/db');
-const { MongoClient } = require('mongodb');
 require('dotenv').config();
-
+// const  clientPromise = require ('./database/db');
 const app = express();
-const client = new MongoClient(process.env.MONGODB_URI, {
-    serverSelectionTimeoutMS: 20000, // Increase timeout to 20 seconds
-});
 
 // Middleware for CORS
 app.use((req, res, next) => {
@@ -25,39 +20,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use('/images', express.static('uploads'));
 
-// Connect to MongoDB once and store the database reference
-const initDB = async () => {
-    try {
-        await client.connect();
-        console.log('Connected to MongoDB');
-    } catch (err) {
-        console.error('Failed to connect to MongoDB:', err.message);
-    }
-};
 
 // Endpoint to fetch data from MongoDB
-app.get('/', async (req, res) => {
-    try {
-        const db = client.db('mydatabase'); // Specify your database name here
-        const blogsCollection = db.collection("blogs");
-        const blogsCatCollection = db.collection("blog_category");
-        const commentsCollection = db.collection("comments");
+// app.get('/', async (req, res) => {
+//     try {
+//       const mongoClient =  await clientPromise;
+//         const db = mongoClient.db('mydatabase'); // Specify your database name here
+//         const blogsCollection = db.collection("blogs");
+//         const blogsCatCollection = db.collection("blog_category");
+//         const commentsCollection = db.collection("comments");
 
-        const [blogs, blogsCat, blogsCmt] = await Promise.all([
-            blogsCollection.find().toArray(),
-            blogsCatCollection.find().toArray(),
-            commentsCollection.find().toArray()
-        ]);
+//         const [blogs, blogsCat, blogsCmt] = await Promise.all([
+//             blogsCollection.find().toArray(),
+//             blogsCatCollection.find().toArray(),
+//             commentsCollection.find().toArray()
+//         ]);
 
-        res.status(200).json({ blog: blogs, category: blogsCat, comment: blogsCmt });
-    } catch (err) {
-        console.error('Connection or collection access failed:', err.message);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
-});
-
-// Initialize the database connection
-initDB();
+//         res.status(200).json({ blog: blogs, category: blogsCat, comment: blogsCmt });
+//     } catch (err) {
+//         console.error('Connection or collection access failed:', err.message);
+//         res.status(500).json({ error: 'Internal Server Error' });
+//     }
+// });
 
 // Use your defined routes
 app.use('/api', require("./Routes/CreateUser"));
