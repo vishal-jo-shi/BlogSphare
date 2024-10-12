@@ -38,3 +38,5 @@ app.use((req,res,next)=>{
   app.use('/api',require("./Routes/DisplayProfiles"))
   app.use('/api',require("./middleware/uploads"))
   app.use('/images', express.static('uploads'));
+
+  module.exports = app;
