@@ -27,7 +27,7 @@ const storage = multer.diskStorage({
 // Create multer instance with storage configuration
 const upload = multer({ storage });
 
-router.get('/upload', upload.single('image'), (req, res) => {
+router.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
       return res.status(400).json({ error: 'File upload failed' });
   }

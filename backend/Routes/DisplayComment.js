@@ -3,7 +3,7 @@ const router = express.Router()
 const Comments = require('../models/Comments');
 const  clientPromise = require ('../database/db');
 
-router.get('/commentdata', async (req, res) => {
+router.post('/commentdata', async (req, res) => {
     try {
       const mongoClient =  await clientPromise;
       // Access the database

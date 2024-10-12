@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 const  clientPromise = require ('../database/db')
 
-router.get('/blogdata',async(req,res)=>{
+router.post('/blogdata',async(req,res)=>{
   try {
     const mongoClient =  await clientPromise;
       // Access the database
@@ -29,7 +29,7 @@ router.get('/blogdata',async(req,res)=>{
 })
 
 
-router.get('/myblogs', async (req, res) => {
+router.post('/myblogs', async (req, res) => {
   try {
     const mongoClient =  await clientPromise;
     // Access the database
