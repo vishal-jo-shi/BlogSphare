@@ -236,7 +236,7 @@ export default function ViewBlog() {
                     {/* Comments Section */}
                     <hr />
                     <h3>Comments</h3>
-                    {comments.length > 0 ? (
+                    {comments && comments.length > 0 ? (
                         comments.map((comment, index) => (
                             <Comment
                                 key={index}

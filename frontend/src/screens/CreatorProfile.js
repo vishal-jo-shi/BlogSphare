@@ -146,7 +146,7 @@ export default function CreatorProfile() {
                     <h5 className="text-center w-100">Blogs</h5>
                     <hr />
                     <div className="container">
-                        {blogCat.length > 0 && blogData.length > 0 ? (
+                        {blogCat && blogCat.length > 0 && blogData && blogData.length > 0 ? (
                             blogCat.map((data) => {
                                 // Filter blogs by category
                                 const filteredBlogs = blogData.filter(blog =>
@@ -154,7 +154,7 @@ export default function CreatorProfile() {
                                 );
 
                                 // Check if there are filtered blogs
-                                if (filteredBlogs.length > 0) {
+                                if (filteredBlogs && filteredBlogs.length > 0) {
                                     return (
                                         <div className="row mb-3" key={data._id}>
                                             <div className="fs-3 mb-3 mt-3">{data.categoryName}</div>

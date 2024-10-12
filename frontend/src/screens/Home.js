@@ -107,14 +107,14 @@ export default function Home() {
       </div>
 
       <div className="container">
-        {blogCat.length > 0 ? (
+        {blogCat && blogCat.length > 0 ? (
           blogCat.map((data) => {
             const filteredBlogs = blogData.filter(blog =>
               blog.categoryName === data.categoryName &&
               blog.title.toLowerCase().includes(search.toLowerCase())
             );
 
-            if (filteredBlogs.length > 0) {
+            if (filteredBlogs && filteredBlogs.length > 0) {
               return (
                 <div className="row mb-3" key={data._id}>
                   <div className="fs-3 mb-3 mt-3">{data.categoryName}</div>
@@ -133,7 +133,7 @@ export default function Home() {
           <p>No blogs available</p>
         )}
 
-        {blogData.length > 0 && blogCat.every(cat => {
+        {blogData && blogData.length > 0 &&  blogCat && blogCat.every(cat => {
           const hasBlogs = blogData.some(blog =>
             blog.title.toLowerCase().includes(search.toLowerCase())
           );
