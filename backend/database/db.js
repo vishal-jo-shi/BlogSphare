@@ -2,7 +2,9 @@ const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
 const uri = process.env.MONGODB_URI
-const options = {}
+const options = {
+    serverSelectionTimeoutMS: 30000 // Set timeout to 30 seconds (30000 milliseconds)
+};
  let client ,clientPromise
 
  if(!process.env.MONGODB_URI){
