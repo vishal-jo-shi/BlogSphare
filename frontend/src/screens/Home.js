@@ -112,7 +112,7 @@ export default function Home() {
             const filteredBlogs = Array.isArray(blogData) ? blogData.filter(blog =>
               blog.categoryName === data.categoryName &&
               blog.title.toLowerCase().includes(search.toLowerCase())
-            );
+            ):[];
 
             if (filteredBlogs && filteredBlogs.length > 0) {
               return (
