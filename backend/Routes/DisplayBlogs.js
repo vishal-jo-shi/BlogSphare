@@ -21,10 +21,10 @@ router.post('/blogdata',async(req,res)=>{
           blogsCollection.find().toArray(),
           blogsCatCollection.find().toArray()
       ]);
-      res.send([blogs,blogsCat]);
+      res.json([blogs,blogsCat]);
   } catch (error) {
       console.error(error.message);
-      res.send("Server Error")
+      res.json("Server Error")
   }
 })
 
