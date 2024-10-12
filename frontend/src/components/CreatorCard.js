@@ -12,7 +12,7 @@ export default function CreatorCard(props) {
 
   const loadData = async () => {
     // Fetch profile data
-    const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
+    const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/myprofiledata`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ export default function CreatorCard(props) {
         // Optimistic UI update
         setIsFollowing(!isFollowing);
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}//api/followfollowing`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followfollowing`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

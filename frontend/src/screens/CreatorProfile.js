@@ -16,7 +16,7 @@ export default function CreatorProfile() {
     const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
     const loadData = async () => {
         // Fetch blog data
-        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myblogs`, {
+        let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/myblogs`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -29,7 +29,7 @@ export default function CreatorProfile() {
         setBlogCat(res[1]);
       
         // Fetch profile data
-        const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
+        const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/myprofiledata`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ export default function CreatorProfile() {
         // Optimistic UI update
         setIsFollowing(!isFollowing);
 
-        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/followfollowing`, {
+        const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}api/followfollowing`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
