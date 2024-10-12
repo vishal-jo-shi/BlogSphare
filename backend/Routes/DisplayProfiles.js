@@ -7,23 +7,25 @@ const fs = require('fs');
 const  clientPromise = require ('../database/db');
 router.get('/usersprofile', async (req, res) => {
     try {
-        const mongoClient =  await clientPromise;
-      // Access the database
-      const db = mongoClient.db('mydatabase'); // Specify your database name here
-      // Access collections
-      const profilesCollection = db.collection("comments");
+        const mongoClient = await clientPromise;
+        // Access the database
+        const db = mongoClient.db('mydatabase'); // Specify your database name here
+        // Access collections
+        const profilesCollection = db.collection("profile");
         const email = req.body.email;
-        const profiles = await profilesCollection.find({ email: { $ne: email } }); // Fetch all profiles except the one with the specified email
-        res.json(profiles); // Send the filtered profiles back as a response
+        // Fetch all profiles except the one with the specified email, and convert to array
+        const profiles = await profilesCollection.find({ email: { $ne: email } }).toArray();
+        // Send the filtered profiles back as a response
+        res.json(profiles);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
     }
 });
 
+
 router.get('/myprofiledata', async (req, res) => {
     try {
-        mongoDB(); // Connect to your database
         const email  = req.body.email; // Get the email from the request body
 
         if (!email) {

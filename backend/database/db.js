@@ -1,26 +1,37 @@
 const { MongoClient } = require('mongodb');
 require('dotenv').config();
 
-const uri = process.env.MONGODB_URI
+const uri = process.env.MONGODB_URI;
 const options = {
-    serverSelectionTimeoutMS: 30000 // Set timeout to 30 seconds (30000 milliseconds)
+    serverSelectionTimeoutMS: 30000, // Increase the timeout to 30 seconds
+    socketTimeoutMS: 30000, // Increase the socket timeout to 30 seconds
 };
- let client ,clientPromise
 
- if(!process.env.MONGODB_URI){
-    throw new Error('Please add you Mongo URI to .env')
- }
+let client;
+let clientPromise;
 
- if(process.env.NODE_ENV==='development'){
-        if(!global._mongoClientPromise){
-            client = new MongoClient(uri,options)
-            global._mongoClientPromise = client.connect()
-        }
-        clientPromise=global._mongoClientPromise
- }else{
-    client = new MongoClient(uri,options)
-    clientPromise = client.connect()
- }
- console.log("just connected")
+if (!uri) {
+    throw new Error('Please add your Mongo URI to .env');
+}
 
- module.exports= clientPromise
+if (process.env.NODE_ENV === 'development') {
+    // Check if there's already a client promise for reuse
+    if (!global._mongoClientPromise) {
+        client = new MongoClient(uri, options);
+        global._mongoClientPromise = client.connect();
+    }
+    clientPromise = global._mongoClientPromise;
+} else {
+    // For production, create a new client and connect
+    client = new MongoClient(uri, options);
+    clientPromise = client.connect();
+}
+
+// Log successful connection
+clientPromise.then(() => {
+    console.log("Connected to MongoDB");
+}).catch(err => {
+    console.error("MongoDB connection error:", err);
+});
+
+module.exports = clientPromise;
