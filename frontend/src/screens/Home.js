@@ -107,7 +107,7 @@ export default function Home() {
       </div>
 
       <div className="container">
-        {blogCat && blogCat.length > 0 ? (
+        {Array.isArray(blogCat) && blogCat.length > 0 ? (
           blogCat.map((data) => {
             const filteredBlogs = blogData.filter(blog =>
               blog.categoryName === data.categoryName &&
