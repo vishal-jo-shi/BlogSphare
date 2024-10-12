@@ -38,12 +38,6 @@ app.use((err, req, res, next) => {
     res.status(500).send('Something broke!');
 });
 
-// Check for required environment variables
-if (!process.env.PORT || !process.env.FRONTEND_URL) {
-    console.error("Environment variables PORT and FRONTEND_URL are required");
-    process.exit(1);
-}
-
 // Start the server
 app.listen(process.env.PORT, () => {
     console.log(`App listening on port ${process.env.PORT}`);
