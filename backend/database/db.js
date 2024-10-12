@@ -4,16 +4,31 @@ require('dotenv').config();
 const mongoDB = async () => {
     try {
         // Connect to MongoDB
-        const db = await mongoose.connect(process.env.MONGO_URL, {
+        await mongoose.connect(process.env.MONGO_URL, {
             serverSelectionTimeoutMS: 20000 // Increase timeout to 20 seconds
         });
         console.log('Connected to MongoDB');
 
-        // Fetching data concurrently
+        // Ensure connection is established
+        if (mongoose.connection.readyState !== 1) {
+            throw new Error('MongoDB connection is not established');
+        }
+
+        // Attempt to fetch collections
+        const blogsCollection = mongoose.connection.db.collection("blogs");
+        const blogsCatCollection = mongoose.connection.db.collection("blog_category");
+        const commentsCollection = mongoose.connection.db.collection("comments");
+
+        // Check if collections are available
+        if (!blogsCollection || !blogsCatCollection || !commentsCollection) {
+            throw new Error('One or more collections are not available');
+        }
+
+        // Fetch data concurrently and store in global variables
         const [blogs, blogsCat, blogsCmt] = await Promise.all([
-            db.collection("blogs").find().toArray(),
-            db.collection("blog_category").find().toArray(),
-            db.collection("comments").find().toArray()
+            blogsCollection.find().toArray(),
+            blogsCatCollection.find().toArray(),
+            commentsCollection.find().toArray()
         ]);
 
         global.blogs = blogs;
@@ -21,7 +36,7 @@ const mongoDB = async () => {
         global.blogsCmt = blogsCmt;
 
     } catch (error) {
-        console.log('Connection failed', error);
+        console.error('Connection or collection access failed', error);
     }
 };
 
