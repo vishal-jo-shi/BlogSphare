@@ -20,8 +20,14 @@ const mongoDB = async () => {
         const commentsCollection = mongoose.connection.db.collection("comments");
 
         // Check if collections are available
-        if (!blogsCollection || !blogsCatCollection || !commentsCollection) {
-            throw new Error('One or more collections are not available');
+        if (!blogsCollection) {
+            throw new Error('Blogs collection is not available');
+        }
+        if (!blogsCatCollection) {
+            throw new Error('Blog category collection is not available');
+        }
+        if (!commentsCollection) {
+            throw new Error('Comments collection is not available');
         }
 
         // Fetch data concurrently and store in global variables
@@ -36,7 +42,10 @@ const mongoDB = async () => {
         global.blogsCmt = blogsCmt;
 
     } catch (error) {
-        console.error('Connection or collection access failed', error);
+        // Log the custom error messages
+        console.error('Connection or collection access failed:', error.message);
+        // You can also log the full error object if needed
+        console.error(error);
     }
 };
 

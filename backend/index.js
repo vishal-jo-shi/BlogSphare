@@ -12,8 +12,6 @@ app.get('/', (req, res) => {
   }
 });
 
-
-
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONTEND_URL}`);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
@@ -38,7 +36,7 @@ app.use((req,res,next)=>{
   app.use('/api',require("./middleware/uploads"))
   app.use('/images', express.static('uploads'));
 
-  // module.exports = app;
-  app.listen(process.env.PORT,()=>{
-    console.log(`App listining on port ${process.env.PORT}`)
-})
+  module.exports = app;
+//   app.listen(process.env.PORT,()=>{
+//     console.log(`App listining on port ${process.env.PORT}`)
+// })
