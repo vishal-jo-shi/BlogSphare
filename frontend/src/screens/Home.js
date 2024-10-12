@@ -109,7 +109,7 @@ export default function Home() {
       <div className="container">
         {Array.isArray(blogCat) && blogCat.length > 0 ? (
           blogCat.map((data) => {
-            const filteredBlogs = blogData.filter(blog =>
+            const filteredBlogs = Array.isArray(blogData) ? blogData.filter(blog =>
               blog.categoryName === data.categoryName &&
               blog.title.toLowerCase().includes(search.toLowerCase())
             );
