@@ -6,10 +6,31 @@ const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
-router.post('/blogdata',(req,res)=>{
+const { MongoClient } = require('mongodb');
+const client = new MongoClient(process.env.MONGODB_URI, {
+  serverSelectionTimeoutMS: 20000, // Increase timeout to 20 seconds
+});
+const connectDB = async () => {
+  if (!client.isConnected()) {
+      await client.connect();
+  }
+};
+router.post('/blogdata',async(req,res)=>{
   try {
-      mongoDB();
-      res.send([global.blogs,global.blogsCat]);
+      await connectDB(); // Ensure the database is connected
+
+      // Access the database
+      const db = client.db('mydatabase'); // Specify your database name here
+      // Access collections
+      const blogsCollection = db.collection("blogs");
+      const blogsCatCollection = db.collection("blog_category");
+
+      // Fetch data concurrently
+      const [blogs, blogsCat] = await Promise.all([
+          blogsCollection.find().toArray(),
+          blogsCatCollection.find().toArray()
+      ]);
+      res.send([blogs,blogsCat]);
   } catch (error) {
       console.error(error.message);
       res.send("Server Error")
@@ -19,9 +40,24 @@ router.post('/blogdata',(req,res)=>{
 
 router.post('/myblogs', async (req, res) => {
   try {
-    mongoDB();
-    const blogs = global.blogs.filter(blog => blog.email === req.body.email);
-    res.json([blogs, global.blogsCat]);
+    await connectDB(); // Ensure the database is connected
+
+    // Access the database
+    const db = client.db('mydatabase'); // Specify your database name here
+
+    // Access collections
+    const blogsCollection = db.collection("blogs");
+    const blogsCatCollection = db.collection("blog_category");
+
+    // Fetch data concurrently
+    const [blogs, blogsCat] = await Promise.all([
+        blogsCollection.find().toArray(),
+        blogsCatCollection.find().toArray()
+    ]);
+
+    // Filter blogs by user's email
+    const userBlogs = blogs.filter(blog => blog.email === req.body.email);
+    res.json([userBlogs, blogsCat]);
   } catch (error) {
     res.status(500).json({ error: 'Server Error', details: error.message })
   }
