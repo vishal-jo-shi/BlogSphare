@@ -5,14 +5,13 @@ const app = express()
 
 app.get('/', (req, res) => {
   try {
-    // Your logic here
-    res.send('Hello, World!');
-  } catch (error) {
-    console.error(error);
-    res.status(500).send('Internal Server Error');
+    mongoDB();
+    res.send('MongoDB connection established');
+  } catch (err) {
+    res.status(500).send('Failed to connect to MongoDB');
   }
 });
-mongoDB();
+
 
 
 app.use((req,res,next)=>{
@@ -39,4 +38,7 @@ app.use((req,res,next)=>{
   app.use('/api',require("./middleware/uploads"))
   app.use('/images', express.static('uploads'));
 
-  module.exports = app;
+  // module.exports = app;
+  app.listen(process.env.PORT,()=>{
+    console.log(`App listining on port ${process.env.PORT}`)
+})
