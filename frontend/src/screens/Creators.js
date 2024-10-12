@@ -13,7 +13,7 @@ export default function Creators() {
           const email = localStorage.getItem("userEmail")
             try {
               const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/usersprofile`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                   'Content-Type': 'application/json',
                 },

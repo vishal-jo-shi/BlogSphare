@@ -16,7 +16,7 @@ export default function Home() {
   const loadData = async () => {
     try {
       let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/blogdata`, {
-        method: "POST",
+        method: "GET",
         headers: {
           'Content-Type': 'application/json'
         }

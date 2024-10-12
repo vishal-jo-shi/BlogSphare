@@ -40,7 +40,7 @@ export default function MyProfile() {
     
     // Fetch blog data
     let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myblogs`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },
@@ -51,7 +51,7 @@ export default function MyProfile() {
     setBlogCat(res[1]);
     // Fetch profile data
     response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },

@@ -5,7 +5,7 @@ const mongoDB = require('../database/db')
 const path = require('path');
 const fs = require('fs');
 const  clientPromise = require ('../database/db');
-router.post('/usersprofile', async (req, res) => {
+router.get('/usersprofile', async (req, res) => {
     try {
         const mongoClient =  await clientPromise;
       // Access the database
@@ -21,7 +21,7 @@ router.post('/usersprofile', async (req, res) => {
     }
 });
 
-router.post('/myprofiledata', async (req, res) => {
+router.get('/myprofiledata', async (req, res) => {
     try {
         mongoDB(); // Connect to your database
         const email  = req.body.email; // Get the email from the request body

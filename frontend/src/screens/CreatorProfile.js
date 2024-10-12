@@ -17,7 +17,7 @@ export default function CreatorProfile() {
     const loadData = async () => {
         // Fetch blog data
         let response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myblogs`, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -30,7 +30,7 @@ export default function CreatorProfile() {
       
         // Fetch profile data
         const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },

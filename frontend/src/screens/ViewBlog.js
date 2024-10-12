@@ -21,7 +21,7 @@ export default function ViewBlog() {
             if (!blog) return; // Ensure blog exists
             try {
                 const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/commentdata`, {
-                    method: 'POST',
+                    method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
                     },
