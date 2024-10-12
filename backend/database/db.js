@@ -3,8 +3,8 @@ require('dotenv').config();
 
 const uri = process.env.MONGODB_URI;
 const options = {
-    serverSelectionTimeoutMS: 30000, // Increase the timeout to 30 seconds
-    socketTimeoutMS: 30000, // Increase the socket timeout to 30 seconds
+    serverSelectionTimeoutMS:  50000, // Increase the timeout to 50 seconds
+    socketTimeoutMS:  50000, // Increase the socket timeout to 50 seconds
 };
 
 let client;
