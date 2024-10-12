@@ -12,7 +12,7 @@ export default function CreatorCard(props) {
 
   const loadData = async () => {
     // Fetch profile data
-    const profileResponse = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/myprofiledata`, {
+    const profileResponse = await fetch(`http://localhost:4000/api/myprofiledata`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

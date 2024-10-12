@@ -1,42 +1,39 @@
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
-const path = require('path');
-const fs = require('fs');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 
-// Set up storage for multer
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    // Define the upload path, dynamically creating folder using email
-    const uploadPath = path.join(__dirname, '../uploads', req.body.email);
-    // Check if the directory exists, if not, create it
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-      if (err) {
-        console.error("Directory creation failed:", err);
-        return cb(err); // Pass the error to the callback
-      }
-      cb(null, uploadPath); // Store the file in the newly created folder
-    });
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + file.originalname;
-    cb(null, file.fieldname + '-' + uniqueSuffix);
-  }
+// Configure Cloudinary with credentials from environment variables
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-// Create multer instance with storage configuration
+// Set up Cloudinary storage for multer
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: (req) => req.body.email, // Dynamically create folder using user's email
+    format: async (req, file) => 'png', // Optional: convert all files to PNG
+    public_id: (req, file) => `${Date.now()}-${file.originalname}`, // Create unique file name
+  },
+  
+});
+
+// Create multer instance with Cloudinary storage configuration
 const upload = multer({ storage });
 
 router.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
-      return res.status(400).json({ error: 'File upload failed' });
+    return res.status(400).json({ error: 'File upload failed' });
   }
-  const fileUrl = `${req.protocol}://${req.get('host')}/images/${req.body.email}/${req.file.filename}`;
   
   res.status(200).json({
-      message: 'File uploaded successfully',
-      filename: req.file.filename,
-      path: fileUrl,
+    message: 'File uploaded successfully',
+    filename: req.file.filename, // Cloudinary file name
+    path: req.file.path, // Cloudinary URL to access the image
   });
 });
 

@@ -20,7 +20,7 @@ export default function ViewBlog() {
         const fetchComments = async () => {
             if (!blog) return; // Ensure blog exists
             try {
-                const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/commentdata`, {
+                const response = await fetch(`http://localhost:4000/api/commentdata`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export default function ViewBlog() {
                 const isAuthor = email===blog.email
             console.log()
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/username`, {
+            const response = await fetch(`http://localhost:4000/api/username`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -97,7 +97,7 @@ export default function ViewBlog() {
         };
 
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/addcomment`, {
+            const response = await fetch(`http://localhost:4000/api/addcomment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -128,7 +128,7 @@ export default function ViewBlog() {
     const handleDeleteComment = async (index) => {
         const commentToDelete = comments[index];
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/deletecomment`, {
+            const response = await fetch(`http://localhost:4000/api/deletecomment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ export default function ViewBlog() {
             updatedAt: new Date(),
         };
         try {
-            const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updatecomment`, {
+            const response = await fetch(`http://localhost:4000/api/updatecomment`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

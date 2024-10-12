@@ -75,7 +75,7 @@ export default function UpdateBlog() {
       formData.append('email', email);
       formData.append('image', file);
   
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/upload`, {
+      const response = await fetch(`http://localhost:4000/api/upload`, {
         method: 'POST',
         body: formData,
       });
@@ -131,7 +131,7 @@ export default function UpdateBlog() {
         email: userEmail,
       };
   
-      const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/updateblog`, {
+      const response = await fetch(`http://localhost:4000/api/updateblog`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({id:blog._id,data:blogData}),

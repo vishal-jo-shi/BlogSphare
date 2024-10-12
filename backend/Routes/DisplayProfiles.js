@@ -1,21 +1,23 @@
-const express = require('express')
-const router = express.Router()
+const express = require('express');
+const router = express.Router();
 const Profile = require('../models/Profile');
-const mongoDB = require('../database/db')
-const path = require('path');
-const fs = require('fs');
-const  clientPromise = require ('../database/db');
+const clientPromise = require('../database/db');
+const cloudinary = require('cloudinary').v2; // Import Cloudinary
+
+// Configure Cloudinary
+cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME, // Set your Cloudinary cloud name
+    api_key: process.env.CLOUDINARY_API_KEY,       // Set your Cloudinary API key
+    api_secret: process.env.CLOUDINARY_API_SECRET   // Set your Cloudinary API secret
+});
+
 router.post('/usersprofile', async (req, res) => {
     try {
         const mongoClient = await clientPromise;
-        // Access the database
-        const db = mongoClient.db('mydatabase'); // Specify your database name here
-        // Access collections
+        const db = mongoClient.db('mydatabase');
         const profilesCollection = db.collection("profile");
         const email = req.body.email;
-        // Fetch all profiles except the one with the specified email, and convert to array
         const profiles = await profilesCollection.find({ email: { $ne: email } }).toArray();
-        // Send the filtered profiles back as a response
         res.json(profiles);
     } catch (error) {
         console.error(error.message);
@@ -23,17 +25,16 @@ router.post('/usersprofile', async (req, res) => {
     }
 });
 
-
 router.post('/myprofiledata', async (req, res) => {
     try {
-        const email  = req.body.email; // Get the email from the request body
+        const email = req.body.email;
 
         if (!email) {
-            return res.status(400).json({ message: "email is required" }); // Handle missing email
+            return res.status(400).json({ message: "Email is required" });
         }
-        // Find profile with the email
+
         const profile = await Profile.find({ email: email });
-        res.json(profile); // Send the profile back as a response
+        res.json(profile);
     } catch (error) {
         console.error(error.message);
         res.status(500).send("Server Error");
@@ -42,13 +43,12 @@ router.post('/myprofiledata', async (req, res) => {
 
 router.post('/updateprofile', async (req, res) => {
     try {
-        const { email, data } = req.body; // Destructure email and data from request body       
-        // Validate that email and data exist
+        const { email, data } = req.body;
+
         if (!email || !data) {
             return res.status(400).json({ message: "Email and data are required" });
         }
 
-        // Find the profile by email to retrieve the current profile data
         const existingProfile = await Profile.findOne({ email });
         if (!existingProfile) {
             return res.status(404).json({ message: "Profile not found" });
@@ -56,21 +56,23 @@ router.post('/updateprofile', async (req, res) => {
 
         // Check if the profile picture is changing
         if (existingProfile.profilePic && data.profilePic && existingProfile.profilePic !== data.profilePic) {
-            const oldImgPath = path.join(__dirname, '../uploads', email, existingProfile.profilePic.split('/').pop());
-            fs.unlink(oldImgPath, (err) => {
-                if (err) {
-                    console.error('Error deleting old profile picture:', err);
-                }
-            });
+            // Delete the old image from Cloudinary
+            const publicId = existingProfile.profilePic.split('/').pop().split('.')[0]; // Extract public ID
+            await cloudinary.uploader.destroy(publicId);
         }
 
-        // Check if the fields are provided in data, otherwise leave them unchanged
         const updatedFields = {};
         if (data.username) updatedFields.username = data.username;
         if (data.bio) updatedFields.bio = data.bio;
-        if (data.profilePic) updatedFields.profilePic = data.profilePic;
 
-        // Update only the provided fields
+        // Upload new profile picture if it exists
+        if (data.profilePic) {
+            const uploadResponse = await cloudinary.uploader.upload(data.profilePic, {
+                folder: 'profile_pics' // Specify the folder in Cloudinary
+            });
+            updatedFields.profilePic = uploadResponse.secure_url; // Store the secure URL
+        }
+
         const updatedProfile = await Profile.findOneAndUpdate(
             { email: email },
             { $set: updatedFields },
@@ -81,38 +83,31 @@ router.post('/updateprofile', async (req, res) => {
             return res.status(404).json({ message: "Profile update failed" });
         }
 
-        // Send success response with the updated profile
         res.json({ success: true, profile: updatedProfile });
     } catch (error) {
-        console.error('Error in updateprofile:', error); // Log the error
+        console.error('Error in updateprofile:', error);
         res.status(500).send("Server Error");
     }
 });
-
-
 
 router.post('/followfollowing', async (req, res) => {
     try {
         const { currentUserEmail, profileUserEmail, isFollowing } = req.body;
 
-        // Find the current user and profile user
         const currentUser = await Profile.findOne({ email: currentUserEmail });
         const profileUser = await Profile.findOne({ email: profileUserEmail });
 
-        // Check if both users exist
         if (!currentUser || !profileUser) {
             return res.status(404).json({ error: "User not found" });
         }
 
         if (isFollowing) {
-            // Unfollow logic
             currentUser.following = currentUser.following.filter(email => email !== profileUserEmail);
             profileUser.follower = profileUser.follower.filter(email => email !== currentUserEmail);
             await currentUser.save();
             await profileUser.save();
             return res.json({ isFollowing: false });
         } else {
-            // Follow logic
             currentUser.following.push(profileUserEmail);
             profileUser.follower.push(currentUserEmail);
             await currentUser.save();
@@ -128,26 +123,23 @@ router.post('/followfollowing', async (req, res) => {
 router.post('/followingProfiles', async (req, res) => {
     const { emails } = req.body;
     try {
-      const profiles = await Profile.find({ email: { $in: emails } }); // Fetch profiles based on emails
-
-      res.json(profiles);
+        const profiles = await Profile.find({ email: { $in: emails } });
+        res.json(profiles);
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
+        console.error(error);
+        res.status(500).send('Server error');
     }
-  });
+});
 
-  router.post('/followerProfiles', async (req, res) => {
+router.post('/followerProfiles', async (req, res) => {
     const { emails } = req.body;
     try {
-      const profiles = await Profile.find({ email: { $in: emails } }); // Fetch profiles based on emails
-
-      res.json(profiles);
+        const profiles = await Profile.find({ email: { $in: emails } });
+        res.json(profiles);
     } catch (error) {
-      console.error(error);
-      res.status(500).send('Server error');
+        console.error(error);
+        res.status(500).send('Server error');
     }
-  });
+});
 
-
-module.exports = router
+module.exports = router;
