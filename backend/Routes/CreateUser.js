@@ -5,6 +5,7 @@ const Profile = require("../models/Profile");
 const {body,validationResult} = require('express-validator')
 const bcrypt = require('bcryptjs'); 
 const jwt = require('jsonwebtoken'); 
+const clientPromise = require('../database/db')
 
 
 router.post('/createuser', [
@@ -13,15 +14,17 @@ router.post('/createuser', [
     body('password', 'Incorrect Password').optional().isLength({ min: 5 }),
     body('username', 'Invalid Username').optional().isLength({ min: 5 })
 ], async (req, res) => {
-    // Check for validation errors
     const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(400).json({ error: error.array() });
     }
 
     try {
-        // Check if a user with the same email already exists
-        let existingUser = await User.findOne({ email: req.body.email });
+        const mongoClient =  await clientPromise;
+        const db = mongoClient.db();
+
+        // Check if a user with the same email already exists (using native MongoDB driver)
+        let existingUser = await db.collection('users').findOne({ email: req.body.email });
         if (existingUser) {
             return res.json({ success: false, error: "This email is already registered" });
         }
@@ -30,7 +33,7 @@ router.post('/createuser', [
         const salt = await bcrypt.genSalt(10);
         let secPassword = await bcrypt.hash(req.body.password, salt);
 
-        // Create the new user
+        // Create the new user using Mongoose
         const user = await User.create({
             email: req.body.email,
             name: req.body.name,
@@ -38,7 +41,7 @@ router.post('/createuser', [
             password: secPassword,
         });
 
-        // Create a new profile for the user
+        // Create a new profile for the user using Mongoose
         await Profile.create({
             email: user.email,
             username: user.username,
@@ -60,37 +63,51 @@ router.post('/createuser', [
 
 
 
-router.post('/loginuser',[
-    body('email','Incorrect Email').isEmail(),
-    body('password','Incorrect Password').optional().isLength({ min: 5 })
-],async(req,res)=>{
-    
-    const error = validationResult(req);
-    if(!error.isEmpty()){
-        return res.status(400).json({error:error.array()})
+router.post('/loginuser', [
+    body('email', 'Incorrect Email').isEmail(),
+    body('password', 'Incorrect Password').optional().isLength({ min: 5 })
+], async (req, res) => {
+
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ error: errors.array() });
     }
+
     let email = req.body.email;
     try {
-        let userData = await User.findOne({email});
-       if(!userData){
-            return res.status(400).json({error:"Try login with correct Email"})
-       } 
-        const pwdCompare = await bcrypt.compare(req.body.password,userData.password)
-       if(!pwdCompare){
-            return res.status(400).json({error:"Try login with correct Password"})
-       }
+        // Use native MongoDB driver to perform raw operations if needed
+        const mongoClient =  await clientPromise;
+        const db = mongoClient.db();
 
-       const data = {
-            user:{
-                id:userData.id
+        // Example of using the native driver to get the user data
+        let userData = await db.collection('users').findOne({ email });
+        if (!userData) {
+            return res.status(400).json({ error: "Try login with correct Email" });
+        }
+
+        // Compare password using bcrypt
+        const pwdCompare = await bcrypt.compare(req.body.password, userData.password);
+        if (!pwdCompare) {
+            return res.status(400).json({ error: "Try login with correct Password" });
+        }
+
+        // Generate JWT token
+        const data = {
+            user: {
+                id: userData._id  // Use _id if working with MongoDB driver
             }
-       }
-       const authToken = jwt.sign(data,process.env.JWT_SECRET)
-        res.json({success:true,authToken:authToken})
+        };
+        const authToken = jwt.sign(data, process.env.JWT_SECRET);
+
+        // Send response with token
+        res.json({ success: true, authToken: authToken });
+
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        res.status(500).json({ error: "Internal server error" });
     }
-})
+});
+
 
 router.post('/username',async(req,res)=>{
     let email = req.body.email;
