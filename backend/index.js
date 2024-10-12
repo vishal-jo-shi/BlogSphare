@@ -3,8 +3,6 @@ const mongoDB = require('./database/db')
 require('dotenv').config();
 const app = express()
 
-mongoDB();
-
 app.get('/', (req, res) => {
   try {
     // Your logic here
@@ -14,6 +12,9 @@ app.get('/', (req, res) => {
     res.status(500).send('Internal Server Error');
   }
 });
+mongoDB();
+
+
 app.use((req,res,next)=>{
     res.setHeader("Access-Control-Allow-Origin", `${process.env.FRONTEND_URL}`);
     res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
