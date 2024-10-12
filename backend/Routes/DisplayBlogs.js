@@ -5,7 +5,7 @@ const Profile = require('../models/Profile');
 const Comments = require('../models/Comments')
 const fs = require('fs');
 const path = require('path');
-const  clientPromise = require ('../database/db');
+const  clientPromise = require ('../database/db')
 
 router.get('/blogdata',async(req,res)=>{
   try {
