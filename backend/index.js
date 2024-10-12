@@ -43,6 +43,11 @@ app.use('/images', express.static('uploads'));
 //     }
 // });
 
+app.get('/', async (req, res) => {
+  res.send("Hello World")
+})
+
+
 // Use your defined routes
 app.use('/api', require("./Routes/CreateUser"));
 app.use('/api', require("./Routes/DisplayBlogs"));
