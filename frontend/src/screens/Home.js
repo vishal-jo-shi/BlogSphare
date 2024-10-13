@@ -138,7 +138,7 @@ export default function Home() {
           return !hasBlogs;
         }) && (
           <div className="text-center mt-4">
-            <h5>No results found</h5>
+            <h5>No blogs found</h5>
           </div>
         )}
       </div>
