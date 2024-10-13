@@ -91,7 +91,7 @@ export default function ViewBlog() {
             blogId: blog._id,
             content: newComment,
             email: localStorage.getItem('userEmail') || 'Guest',
-            username: username,
+            username: username || authorName,
             createdAt: new Date(),
             updatedAt: new Date(),
         };
