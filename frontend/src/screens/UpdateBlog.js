@@ -18,6 +18,8 @@ export default function UpdateBlog() {
   const [thumbnailPreview, setThumbnailPreview] = useState(blog?.img || '');
   const [contentSections, setContentSections] = useState([]);
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
 
   // On initial load, populate content sections from blog data
   useEffect(() => {

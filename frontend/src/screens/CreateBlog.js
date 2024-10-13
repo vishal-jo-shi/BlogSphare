@@ -16,6 +16,8 @@ export default function CreateBlog() {
   const [thumbnailPreview, setThumbnailPreview] = useState(null);
   const [category, setCategory] = useState('');
   const [contentSections, setContentSections] = useState([{ id: Date.now(), image: null, text: '' }]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   const handleImageChange = (id, e) => {
     const file = e.target.files[0];
