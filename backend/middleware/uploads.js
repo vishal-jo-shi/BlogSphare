@@ -15,11 +15,11 @@ cloudinary.config({
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: (req) => req.body.email, // Dynamically create folder using user's email
-    format: async (req, file) => 'png', // Optional: convert all files to PNG
-    public_id: (req, file) => `${Date.now()}-${file.originalname}`, // Create unique file name
-  },
-  
+    folder: (req) => req.body.email,
+    format: async (req, file) => file.mimetype.split('/')[1],
+    public_id: (req, file) => `${Date.now()}-${file.originalname}`,
+    quality: 'auto', // Automatically adjust quality based on the image
+  }  
 }); 
 
 // Create multer instance with Cloudinary storage configuration
