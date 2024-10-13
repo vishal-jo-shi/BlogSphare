@@ -5,7 +5,7 @@ import MyBlogs,  {CreateBlogCard} from '../components/MyBlogs';
 import Modal from '../components/Modal'; // Ensure this path is correct
 import FollowerFollowing from '../components/FollowerFollowing';
 import { useMediaQuery } from 'react-responsive';
-import { Link ,useNavigate} from 'react-router-dom';
+import { Link ,useNavigate,useLocation} from 'react-router-dom';
 import ConfirmationModal from '../components/ConfirmationModal';
 
 export default function MyProfile() {
@@ -20,6 +20,7 @@ export default function MyProfile() {
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
   const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
   const navigate = useNavigate();
+  const location = useLocation();
   // State for edit form data
   const [update, setUpdate] = useState(false);
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
