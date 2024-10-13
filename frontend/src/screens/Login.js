@@ -32,7 +32,7 @@ export default function Login() {
     });
     const json = await response.json();
     if (!json.success) {
-      alert("Enter valid Credentials");
+      alert(json.error);
     }
     if (json.success) {
       localStorage.setItem("userEmail", credentials.email);
