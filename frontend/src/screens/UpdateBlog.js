@@ -162,7 +162,6 @@ export default function UpdateBlog() {
         console.error("Failed to update the blog. Status:", response.status);
         return;
       }
-      console.log("Blog successfully updated");
       // Reset form
       setTitle('');
       setDescription('');
@@ -170,7 +169,7 @@ export default function UpdateBlog() {
       setThumbnailPreview(null);
       setCategory('');
       setContentSections([{ id: Date.now(), image: null, text: '' }]);
-      navigate('/myprofile');
+      navigate('/myprofile',{ state: { message :"Blog successfully updated"} })
     } catch (error) {
       console.error("An error occurred while updating the blog:", error);
     }

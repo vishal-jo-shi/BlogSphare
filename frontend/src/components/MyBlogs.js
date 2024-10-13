@@ -34,7 +34,7 @@ export default function MyBlogs({ blogData, blogCat ,loadData}) {
       });
 
       if (response.ok) {
-        navigate('/myprofile');
+        navigate('/myprofile',{ state: { message :"Blog successfully deleted"} })
       } else {
         alert("Error deleting the blog. Please try again.");
       }

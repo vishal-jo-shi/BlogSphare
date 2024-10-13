@@ -115,7 +115,6 @@ export default function CreateBlog() {
       });
 
       if (response.ok) {
-        console.log("Blog successfully submitted");
         // Reset form
         setTitle('');
         setDescription('');
@@ -123,7 +122,7 @@ export default function CreateBlog() {
         setThumbnailPreview(null);
         setCategory('');
         setContentSections([{ id: Date.now(), image: null, text: '' }]);
-        navigate('/myprofile');
+        navigate('/myprofile',{ state: { message :"Blog successfully submitted"} })
       } else {
         console.error("Failed to submit the blog.");
       }
