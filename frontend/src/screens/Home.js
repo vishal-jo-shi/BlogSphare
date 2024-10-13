@@ -48,21 +48,21 @@ export default function Home() {
         <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
           <div className="carousel-inner" id='carousel'>
           
+          {isMobile && (
             <div className="carousel-caption position-absolute top-0 start-0 m-1 " style={{ zIndex: "10000" }}>
               <div className="justify-content-center">
-              {isDesktop && (
-                <>
-              <h1 className=" text-light fs-3 fw-bold">Explore Our World of Blogs</h1>
-              <p className="text-dark fs-4">Dive into captivating stories, ideas, and insights on a wide range of topics!</p>
-              </>
-              )}
-              {isMobile && (
                 <div className="d-flex align-items-center">
               <h1 className="text-light fs-5 fw-bold">Explore Our World of Blogs</h1>
               <p className="text-dark fs-6">Dive into captivating stories, ideas, and insights on a wide range of topics!</p>
               </div>
-              )}
-              {isDesktop && (
+              </div>
+            </div>
+          )}
+            {isDesktop && (
+            <div className="carousel-caption " style={{ zIndex: "10000" }}>
+              <div className="justify-content-center">
+              <h1 className=" text-light fs-3 fw-bold">Explore Our World of Blogs</h1>
+              <p className="text-dark fs-4">Dive into captivating stories, ideas, and insights on a wide range of topics!</p>
                 <input
                   className="form-control me-2"
                   type="search"
@@ -71,9 +71,10 @@ export default function Home() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                 />
-              )}
               </div>
             </div>
+            )}
+
             <div className="carousel-item active">
               <img src="/Image/blog1.jpg" className="d-block w-100" alt="Nature" />
             </div>
@@ -131,7 +132,7 @@ export default function Home() {
           <p>No blogs available</p>
         )}
 
-        {blogData && blogData.length > 0 &&  blogCat && blogCat.every(cat => {
+        {blogData && blogData.length > 0 && Array.isArray(blogCat) && blogCat.every(cat => {
           const hasBlogs = blogData.some(blog =>
             blog.title.toLowerCase().includes(search.toLowerCase())
           );
@@ -141,6 +142,7 @@ export default function Home() {
             <h5>No blogs found</h5>
           </div>
         )}
+
       </div>
 
       {isDtop && (
