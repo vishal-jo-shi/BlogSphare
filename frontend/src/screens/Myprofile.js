@@ -90,19 +90,21 @@ export default function MyProfile() {
   const handleFileChange = (e) => {
     const file = e.target.files[0];
     const maxSize = 4 * 1024 * 1024; // 10MB
+    const inputElement = e.target; // Reference to the input element
     console.log("Selected file size:", file.size); // Log the file size for debugging
     if (file && file.size > maxSize) {
       setErrorMessage("File is too large. Maximum file size is 4MB.");
       setShowModal(true);
+      inputElement.value = null;
       return;
     }else{
-      setEditData({
-        ...editData,
-        profilePic: file, // Store the file object
-        imagePreview: URL.createObjectURL(file), // Preview the selected image
-      });
+      
     }
-    
+    setEditData({
+      ...editData,
+      profilePic: file, // Store the file object
+      imagePreview: URL.createObjectURL(file), // Preview the selected image
+    });
   }
 
 
