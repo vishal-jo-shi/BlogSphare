@@ -23,7 +23,10 @@ const storage = new CloudinaryStorage({
 }); 
 
 // Create multer instance with Cloudinary storage configuration
-const upload = multer({ storage });
+const upload = multer({
+  storage,
+  limits: { fileSize: 10 * 1024 * 1024 } // Set max file size to 10MB
+});
 
 router.post('/upload', upload.single('image'), (req, res) => {
   if (!req.file) {
