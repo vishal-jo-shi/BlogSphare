@@ -35,4 +35,4 @@ const blogSchema = new Schema({
     }
 });
 
-module.exports = mongoose.model('blogs', blogSchema);
+module.exports = mongoose.model('Blogs', blogSchema);

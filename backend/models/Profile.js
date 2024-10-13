@@ -33,4 +33,4 @@ const ProfileSchema = new Schema({
     timestamps: true, // Automatically adds `createdAt` and `updatedAt` timestamps
 });
 
-module.exports = mongoose.model('Profiles', ProfileSchema);
+module.exports = mongoose.model('Profile', ProfileSchema);
