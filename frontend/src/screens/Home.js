@@ -47,20 +47,9 @@ export default function Home() {
       <div>
         <div id="carouselExampleFade" className="carousel slide carousel-fade" data-bs-ride="carousel">
           <div className="carousel-inner" id='carousel'>
-          {isMobile && (
-          <div className="justify-content-center">
-                  <input
-                          className="form-control me-2"
-                          type="search"
-                          placeholder="Search"
-                          aria-label="Search"
-                          value={search}
-                          onChange={(e) => setSearch(e.target.value)}
-                        />
-                        </div>
-          )}
-            <div className="carousel-caption" style={{ zIndex: "10" }}>
-              <div className="justify-content-center mb-5">
+          
+            <div className="carousel-caption position-absolute top-0 start-0 m-1 " style={{ zIndex: "10000" }}>
+              <div className="justify-content-center">
               {isDesktop && (
                 <>
               <h1 className=" text-light fs-3 fw-bold">Explore Our World of Blogs</h1>
@@ -68,10 +57,10 @@ export default function Home() {
               </>
               )}
               {isMobile && (
-                <>
+                <div className="d-flex align-items-center">
               <h1 className="text-light fs-5 fw-bold">Explore Our World of Blogs</h1>
-              <p className="text-dark fs-4">Dive into captivating stories, ideas, and insights on a wide range of topics!</p>
-              </>
+              <p className="text-dark fs-6">Dive into captivating stories, ideas, and insights on a wide range of topics!</p>
+              </div>
               )}
               {isDesktop && (
                 <input
@@ -86,13 +75,13 @@ export default function Home() {
               </div>
             </div>
             <div className="carousel-item active">
-              <img src="/Image/blog1.jpeg" className="d-block w-100" alt="Nature" />
+              <img src="/Image/blog1.jpg" className="d-block w-100" alt="Nature" />
             </div>
             <div className="carousel-item">
-              <img src="/Image/blog2.jpeg" className="d-block w-100" alt="Sports" />
+              <img src="/Image/blog2.jpg" className="d-block w-100" alt="Sports" />
             </div>
             <div className="carousel-item">
-              <img src="/Image/blog3.jpeg" className="d-block w-100" alt="Travel" />
+              <img src="/Image/blog3.jpg" className="d-block w-100" alt="Travel" />
             </div>
           </div>
           <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleFade" data-bs-slide="prev">
@@ -105,7 +94,16 @@ export default function Home() {
           </button>
         </div>
       </div>
-
+      {isMobile && (
+                <input
+                  className="form-control me-2"
+                  type="search"
+                  placeholder="Search"
+                  aria-label="Search"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                />
+              )}
       <div className="container">
         {Array.isArray(blogCat) && blogCat.length > 0 ? (
           blogCat.map((data) => {
