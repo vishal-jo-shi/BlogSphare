@@ -2,6 +2,7 @@ import React, { useState ,useEffect} from 'react';
 import { Link, useNavigate,useLocation } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import ConfirmationModal from '../components/ConfirmationModal';
+
 export default function Login() {
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [showModal, setShowModal] = useState(false); // State to control modal visibility
@@ -32,7 +33,8 @@ export default function Login() {
     });
     const json = await response.json();
     if (!json.success) {
-      alert(json.error);
+        setErrorMessage(json.error);
+        setShowModal(true);
     }
     if (json.success) {
       localStorage.setItem("userEmail", credentials.email);
