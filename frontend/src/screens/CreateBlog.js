@@ -128,7 +128,15 @@ export default function CreateBlog() {
         console.error("Failed to submit the blog.");
       }
     } catch (error) {
-      console.error("An error occurred while submitting the blog:", error);
+      if (error.message.includes('504')) {
+        console.error('Server timeout: ', error);
+        setErrorMessage('The request took too long. Please try again later.');
+      } else {
+        console.error('An error occurred while submitting the blog: ', error);
+        setErrorMessage('An error occurred. Please try again.');
+      }
+  
+      setShowModal(true);
     }
   };
 
