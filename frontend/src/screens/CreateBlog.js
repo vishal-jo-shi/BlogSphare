@@ -4,6 +4,7 @@ import Footer from '../components/Footer';
 import ContentSection from '../components/ContentSection';
 import { useLocation,useNavigate } from 'react-router-dom';
 import { useMediaQuery } from 'react-responsive';
+import ConfirmationModal from '../components/ConfirmationModal';
 
 export default function CreateBlog() {
   const location = useLocation();
@@ -18,10 +19,13 @@ export default function CreateBlog() {
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   const handleImageChange = (id, e) => {
     const file = e.target.files[0];
-    const maxSize = 4 * 1024 * 1024; // 10MB
-    console.log("Selected file size:", file.size); // Log the file size for debugging
+    const maxSize = 4 * 1024 * 1024; // 4MB
+    const inputElement = e.target; // Reference to the input element
+     
     if (file && file.size > maxSize) {
-      alert("File is too large. Maximum file size is 4MB.");
+      setErrorMessage("File is too large. Maximum file size is 4MB.");
+      setShowModal(true);
+      inputElement.value = null;
       return;
     }
     setContentSections(prevSections =>
@@ -42,10 +46,13 @@ export default function CreateBlog() {
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    const maxSize = 4 * 1024 * 1024; // 10MB
-    console.log("Selected file size:", file.size); // Log the file size for debugging
+    const maxSize = 4 * 1024 * 1024; // 4MB
+    const inputElement = e.target; // Reference to the input element
+     
     if (file && file.size > maxSize) {
-      alert("File is too large. Maximum file size is 4MB.");
+      setErrorMessage("File is too large. Maximum file size is 4MB.");
+      setShowModal(true);
+      inputElement.value = null;
       return;
     }
     setThumbnail(file);
@@ -125,6 +132,10 @@ export default function CreateBlog() {
 
   const removeSection = (id) => {
     setContentSections(prevSections => prevSections.filter(section => section.id !== id));
+  };
+
+  const handleClose = () => {
+    setShowModal(false); // Close the modal
   };
 
   return (
@@ -220,6 +231,13 @@ export default function CreateBlog() {
       {isDesktop && (
       <Footer />
       )}
+      <ConfirmationModal 
+        show={showModal} 
+        handleClose={handleClose} 
+        handleConfirm={handleClose} // Use handleClose for dismissing modal
+        message={errorMessage} 
+        showConfirmButton={false} // Show only the cancel button
+      />
     </div>
   );
 }
