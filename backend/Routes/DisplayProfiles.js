@@ -18,7 +18,7 @@ router.post('/usersprofile', async (req, res) => {
         }
         const mongoClient = await clientPromise;
         const db = mongoClient.db('mydatabase');
-        const profilesCollection = db.collection("profile");
+        const profilesCollection = db.collection("profiles");
         const email = req.body.email;
         if (!email) {
             return res.status(400).json({ message: "Email is required" });
