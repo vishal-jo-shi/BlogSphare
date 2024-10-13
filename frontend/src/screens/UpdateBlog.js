@@ -141,7 +141,7 @@ export default function UpdateBlog() {
         paragraph: section.text,
       }));
   
-      const blogData = {
+      let blogData = {
         title,
         categoryName: category,
         desc: description,
