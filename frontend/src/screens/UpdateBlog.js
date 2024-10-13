@@ -32,6 +32,11 @@ export default function UpdateBlog() {
 
   const handleImageChange = (id, e) => {
     const file = e.target.files[0];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert("File is too large. Maximum file size is 10MB.");
+      return;
+    }
     const newContentSections = contentSections.map((section) =>
       section.id === id ? { ...section, image: file } : section
     );
@@ -51,6 +56,11 @@ export default function UpdateBlog() {
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert("File is too large. Maximum file size is 10MB.");
+      return;
+    }
     setThumbnail(file);
     if (file) {
       setThumbnailPreview(URL.createObjectURL(file));
@@ -66,7 +76,7 @@ export default function UpdateBlog() {
 
   const uploadFile = async (email, file) => {
     // If the file is already a URL (existing image), skip the upload
-    if (typeof file === 'string' && file.startsWith('http')) {
+    if (typeof file === 'string' && file.startsWith('https')) {
       return file; // Return the existing URL
     }
   

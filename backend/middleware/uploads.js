@@ -20,7 +20,7 @@ const storage = new CloudinaryStorage({
     public_id: (req, file) => `${Date.now()}-${file.originalname}`, // Create unique file name
   },
   
-});
+}); 
 
 // Create multer instance with Cloudinary storage configuration
 const upload = multer({ storage });

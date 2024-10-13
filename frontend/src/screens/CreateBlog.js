@@ -18,6 +18,11 @@ export default function CreateBlog() {
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   const handleImageChange = (id, e) => {
     const file = e.target.files[0];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert("File is too large. Maximum file size is 10MB.");
+      return;
+    }
     setContentSections(prevSections =>
       prevSections.map(section => (section.id === id ? { ...section, image: file } : section))
     );
@@ -36,6 +41,11 @@ export default function CreateBlog() {
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
+    const maxSize = 10 * 1024 * 1024; // 10MB
+    if (file.size > maxSize) {
+      alert("File is too large. Maximum file size is 10MB.");
+      return;
+    }
     setThumbnail(file);
     setThumbnailPreview(URL.createObjectURL(file));
   };
