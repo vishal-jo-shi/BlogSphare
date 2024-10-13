@@ -86,6 +86,12 @@ export default function MyProfile() {
   // Handle profilePic file change
   const handleFileChange = (e) => {
     const file = e.target.files[0];
+    const maxSize = 4 * 1024 * 1024; // 10MB
+    console.log("Selected file size:", file.size); // Log the file size for debugging
+    if (file && file.size > maxSize) {
+      alert("File is too large. Maximum file size is 4MB.");
+      return;
+    }
     setEditData({
       ...editData,
       profilePic: file, // Store the file object

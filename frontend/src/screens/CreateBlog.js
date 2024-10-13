@@ -18,10 +18,10 @@ export default function CreateBlog() {
   const isDesktop = useMediaQuery({ query: '(min-width: 768px)' });
   const handleImageChange = (id, e) => {
     const file = e.target.files[0];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 4 * 1024 * 1024; // 10MB
     console.log("Selected file size:", file.size); // Log the file size for debugging
     if (file && file.size > maxSize) {
-      alert("File is too large. Maximum file size is 10MB.");
+      alert("File is too large. Maximum file size is 4MB.");
       return;
     }
     setContentSections(prevSections =>
@@ -42,10 +42,10 @@ export default function CreateBlog() {
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    const maxSize = 10 * 1024 * 1024; // 10MB
+    const maxSize = 4 * 1024 * 1024; // 10MB
     console.log("Selected file size:", file.size); // Log the file size for debugging
     if (file && file.size > maxSize) {
-      alert("File is too large. Maximum file size is 10MB.");
+      alert("File is too large. Maximum file size is 4MB.");
       return;
     }
     setThumbnail(file);
