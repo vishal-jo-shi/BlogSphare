@@ -131,16 +131,6 @@ router.post('/deleteblog', async (req, res) => {
         await Blogs.findByIdAndDelete(req.body.id);
         await Comments.deleteMany({ blogId: req.body.id });
 
-        // Delete main image from Cloudinary
-        const publicId = blogToDelete.img.split('/').pop().split('.')[0]; // Assuming img URL format
-        await cloudinary.uploader.destroy(`blogs/${publicId}`);
-
-        // Delete content images from Cloudinary
-        await Promise.all(blogToDelete.contents.map(async (content) => {
-            const contentPublicId = content.img.split('/').pop().split('.')[0];
-            await cloudinary.uploader.destroy(`blogs/${contentPublicId}`);
-        }));
-
         const profile = await Profile.findOne({ email: blogToDelete.email });
         if (profile) {
             profile.blogs = profile.blogs.filter(blogId => blogId.toString() !== req.body.id);
