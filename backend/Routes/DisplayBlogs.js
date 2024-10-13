@@ -59,10 +59,6 @@ router.post('/myblogs', async (req, res) => {
 router.post('/createblog', async (req, res) => {
     try {
         const { title, categoryName, desc, img, contents, email, createdAt, updatedAt } = req.body;
-
-        // Upload image to Cloudinary
-        const uploadedImage = await cloudinary.uploader.upload(img, { folder: "blogs" });
-        
         const newBlog = new Blogs({
             title,
             categoryName,
@@ -98,34 +94,6 @@ router.post('/updateblog', async (req, res) => {
       const existingBlog = await Blogs.findById(id);
       if (!existingBlog) {
         return res.status(404).json({ message: 'Blog not found' });
-      }
-  
-      // Handle main image updates
-      if (existingBlog.img && existingBlog.img !== img) {
-        const publicId = existingBlog.img.split('/').pop().split('.')[0]; // Extract the public ID
-        const folder = existingBlog.img.split('/')[6]; // Assuming the URL format has the folder at this position
-        console.log("folder:",folder)
-        console.log("publicid:",publicId)
-        // Delete old main image from Cloudinary
-        await cloudinary.uploader.destroy(`${email}/${publicId}`);
-      }
-  
-      // Handle images within contents
-      if (Array.isArray(contents)) {
-        for (let i = 0; i < contents.length; i++) {
-          const contentItem = contents[i];
-  
-          // Check if the content item has an img property
-          if (contentItem.img && contentItem.img.startsWith('http')) {
-            const existingImageId = contentItem.img.split('/').pop().split('.')[0]; // Get existing public ID
-            const existingFolder = contentItem.img.split('/')[6]; // Get the folder from the URL
-  
-            // If there's a new image to replace, destroy the old one
-            if (existingBlog.contents[i]?.img && existingBlog.contents[i].img !== contentItem.img) {
-              await cloudinary.uploader.destroy(`${email}/${existingImageId}`);
-            }
-          }
-        }
       }
   
       // Update blog with the new information

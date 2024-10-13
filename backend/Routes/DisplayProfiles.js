@@ -60,13 +60,6 @@ router.post('/updateprofile', async (req, res) => {
             return res.status(404).json({ message: "Profile not found" });
         }
 
-        if (existingProfile.profilePic && data.profilePic && existingProfile.profilePic !== data.profilePic) {
-            const publicId = existingProfile.profilePic.split('/').pop().split('.')[0]; // Extract the public ID
-            const folder = existingProfile.profilePic.img.split('/')[6]; // Assuming the URL format has the folder at this position
-            // Delete old main image from Cloudinary
-            await cloudinary.uploader.destroy(`${folder}/${publicId}`);
-          }
-
         const updatedFields = {};
         if (data.username) updatedFields.username = data.username;
         if (data.bio) updatedFields.bio = data.bio;
