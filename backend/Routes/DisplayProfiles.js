@@ -60,24 +60,18 @@ router.post('/updateprofile', async (req, res) => {
             return res.status(404).json({ message: "Profile not found" });
         }
 
-        // Check if the profile picture is changing
         if (existingProfile.profilePic && data.profilePic && existingProfile.profilePic !== data.profilePic) {
-            // Delete the old image from Cloudinary
-            const publicId = existingProfile.profilePic.split('/').pop().split('.')[0]; // Extract public ID
-            await cloudinary.uploader.destroy(publicId);
-        }
+            const publicId = existingProfile.profilePic.split('/').pop().split('.')[0]; // Extract the public ID
+            const folder = existingProfile.profilePic.img.split('/')[6]; // Assuming the URL format has the folder at this position
+            // Delete old main image from Cloudinary
+            await cloudinary.uploader.destroy(`${folder}/${publicId}`);
+          }
 
         const updatedFields = {};
         if (data.username) updatedFields.username = data.username;
         if (data.bio) updatedFields.bio = data.bio;
+        if (data.profilePic) updatedFields.profilePic = data.profilePic;
 
-        // Upload new profile picture if it exists
-        if (data.profilePic) {
-            const uploadResponse = await cloudinary.uploader.upload(data.profilePic, {
-                folder: 'profile_pics' // Specify the folder in Cloudinary
-            });
-            updatedFields.profilePic = uploadResponse.secure_url; // Store the secure URL
-        }
 
         const updatedProfile = await Profile.findOneAndUpdate(
             { email: email },
