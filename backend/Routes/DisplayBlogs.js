@@ -104,7 +104,8 @@ router.post('/updateblog', async (req, res) => {
       if (existingBlog.img && existingBlog.img !== img) {
         const publicId = existingBlog.img.split('/').pop().split('.')[0]; // Extract the public ID
         const folder = existingBlog.img.split('/')[6]; // Assuming the URL format has the folder at this position
-  
+        console.log("folder:",folder)
+        console.log("publicid:",publicId)
         // Delete old main image from Cloudinary
         await cloudinary.uploader.destroy(`${folder}/${publicId}`);
       }
