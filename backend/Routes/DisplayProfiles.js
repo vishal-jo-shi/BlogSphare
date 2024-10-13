@@ -13,15 +13,21 @@ cloudinary.config({
 
 router.post('/usersprofile', async (req, res) => {
     try {
+        if (!req.body.email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
         const mongoClient = await clientPromise;
         const db = mongoClient.db('mydatabase');
         const profilesCollection = db.collection("profile");
         const email = req.body.email;
+        if (!email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
         const profiles = await profilesCollection.find({ email: { $ne: email } }).toArray();
         res.json(profiles);
     } catch (error) {
         console.error(error.message);
-        res.status(500).send("Server Error");
+        res.status(500).json("Server Error");
     }
 });
 

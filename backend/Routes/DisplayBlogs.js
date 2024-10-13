@@ -35,6 +35,9 @@ router.post('/blogdata', async (req, res) => {
 // Fetch user's blogs
 router.post('/myblogs', async (req, res) => {
     try {
+        if (!req.body.email) {
+            return res.status(400).json({ message: "Email is required" });
+        }
         const mongoClient = await clientPromise;
         const db = mongoClient.db('mydatabase');
         const blogsCollection = db.collection("blogs");

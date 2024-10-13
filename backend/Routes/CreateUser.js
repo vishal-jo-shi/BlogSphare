@@ -18,7 +18,9 @@ router.post('/createuser', [
     if (!error.isEmpty()) {
         return res.status(400).json({ error: error.array() });
     }
-
+    if (!req.body.email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
     try {
         const mongoClient =  await clientPromise;
         const db = mongoClient.db();
@@ -111,6 +113,9 @@ router.post('/loginuser', [
 
 router.post('/username',async(req,res)=>{
     let email = req.body.email;
+    if (!email) {
+        return res.status(400).json({ message: "Email is required" });
+    }
     try {
         let userData = await User.findOne({email});
         res.send({username:userData.username})
