@@ -120,7 +120,7 @@ router.post('/username',async(req,res)=>{
         let userData = await User.findOne({email});
         res.send({username:userData.username})
     } catch (error) {
-        console.log(error)
+        // // console.log(console.log(console.log(error)););
     }
 })
 

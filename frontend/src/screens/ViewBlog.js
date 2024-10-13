@@ -52,7 +52,7 @@ export default function ViewBlog() {
     const fetchUsername = async (email) => {
         if (!blog || !email) return;  // Ensure blog and email are valid
                 const isAuthor = email===blog.email
-            console.log()
+            // // console.log(console.log(console.log()););
         try {
             const response = await fetch(`${process.env.REACT_APP_BACKEND_URL}/api/username`, {
                 method: 'POST',

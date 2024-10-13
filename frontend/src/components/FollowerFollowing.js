@@ -39,7 +39,7 @@ export default function FollowerFollowing(props) {
     try {
       const currentUserEmail = localStorage.getItem("userEmail");
       if (!currentUserEmail) {
-        console.log("User not logged in. Please log in to follow.");
+        // console.log(console.log("User not logged in. Please log in to follow."););
         return;
       }
       setIsFollowing(!isFollowing);

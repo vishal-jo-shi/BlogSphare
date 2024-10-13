@@ -74,7 +74,7 @@ export default function MyProfile() {
     });
     res = await response.json();
     setProfileData(res[0]);
-    console.log()
+    // // console.log(console.log(console.log()););
     // Set initial editData to current profile data
     setEditData({
       username: res[0].username || '',
