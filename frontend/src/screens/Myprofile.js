@@ -6,7 +6,7 @@ import Modal from '../components/Modal'; // Ensure this path is correct
 import FollowerFollowing from '../components/FollowerFollowing';
 import { useMediaQuery } from 'react-responsive';
 import { Link } from 'react-router-dom';
-
+import ConfirmationModal from '../components/ConfirmationModal';
 
 export default function MyProfile() {
   const [profileData, setProfileData] = useState({});
@@ -17,6 +17,9 @@ export default function MyProfile() {
   const [showFollowing, setShowFollowing] = useState(false);
   const [followingProfiles, setFollowingProfiles] = useState([]);
   const [followerProfiles, setFollowerProfiles] = useState([]);
+  const [showModal, setShowModal] = useState(false); // State to control modal visibility
+  const [errorMessage, setErrorMessage] = useState(""); // State to hold the error message
+
   // State for edit form data
   const [update, setUpdate] = useState(false);
   const isMobile = useMediaQuery({ query: '(max-width: 767px)' });
@@ -89,14 +92,17 @@ export default function MyProfile() {
     const maxSize = 4 * 1024 * 1024; // 10MB
     console.log("Selected file size:", file.size); // Log the file size for debugging
     if (file && file.size > maxSize) {
-      alert("File is too large. Maximum file size is 4MB.");
+      setErrorMessage("File is too large. Maximum file size is 4MB.");
+      setShowModal(true);
       return;
+    }else{
+      setEditData({
+        ...editData,
+        profilePic: file, // Store the file object
+        imagePreview: URL.createObjectURL(file), // Preview the selected image
+      });
     }
-    setEditData({
-      ...editData,
-      profilePic: file, // Store the file object
-      imagePreview: URL.createObjectURL(file), // Preview the selected image
-    });
+    
   }
 
 
@@ -181,6 +187,10 @@ export default function MyProfile() {
   };
   const handleCloseFollowers = () => setShowFollowers(false);
   const handleCloseFollowing = () => setShowFollowing(false);
+
+  const handleClose = () => {
+    setShowModal(false); // Close the modal
+  };
 
   return (
     <div className="d-flex flex-column min-vh-100">
@@ -424,6 +434,13 @@ export default function MyProfile() {
       {isDesktop && (
       <Footer />
       )}
+      <ConfirmationModal 
+        show={showModal} 
+        handleClose={handleClose} 
+        handleConfirm={handleClose} // Use handleClose for dismissing modal
+        message={errorMessage} 
+        showConfirmButton={false} // Show only the cancel button
+      />
     </div>
   );
 }
