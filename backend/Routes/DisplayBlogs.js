@@ -107,7 +107,7 @@ router.post('/updateblog', async (req, res) => {
         console.log("folder:",folder)
         console.log("publicid:",publicId)
         // Delete old main image from Cloudinary
-        await cloudinary.uploader.destroy(`${folder}/${publicId}`);
+        await cloudinary.uploader.destroy(`${email}/${publicId}`);
       }
   
       // Handle images within contents
@@ -122,7 +122,7 @@ router.post('/updateblog', async (req, res) => {
   
             // If there's a new image to replace, destroy the old one
             if (existingBlog.contents[i]?.img && existingBlog.contents[i].img !== contentItem.img) {
-              await cloudinary.uploader.destroy(`${existingFolder}/${existingImageId}`);
+              await cloudinary.uploader.destroy(`${email}/${existingImageId}`);
             }
           }
         }
