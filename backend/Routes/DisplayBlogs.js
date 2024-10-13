@@ -92,46 +92,72 @@ router.post('/createblog', async (req, res) => {
 // Update a blog
 router.post('/updateblog', async (req, res) => {
     try {
-        const { id, data } = req.body;
-        const { title, categoryName, desc, img, contents, email } = data;
-
-        const existingBlog = await Blogs.findById(id);
-        if (!existingBlog) {
-            return res.status(404).json({ message: 'Blog not found' });
+      const { id, data } = req.body;
+      const { title, categoryName, desc, img, contents, email } = data;
+  
+      const existingBlog = await Blogs.findById(id);
+      if (!existingBlog) {
+        return res.status(404).json({ message: 'Blog not found' });
+      }
+  
+      // Handle main image updates
+      if (existingBlog.img && existingBlog.img !== img) {
+        const publicId = existingBlog.img.split('/').pop().split('.')[0]; // Extract the public ID
+        const folder = existingBlog.img.split('/')[6]; // Assuming the URL format has the folder at this position
+  
+        // Delete old main image from Cloudinary
+        await cloudinary.uploader.destroy(`${folder}/${publicId}`);
+        
+        // Upload new main image to Cloudinary
+        const uploadedImage = await cloudinary.uploader.upload(img, { folder: "blogs" });
+        img = uploadedImage.secure_url; // Update img to the new URL
+      }
+  
+      // Handle images within contents
+      if (Array.isArray(contents)) {
+        for (let i = 0; i < contents.length; i++) {
+          const contentItem = contents[i];
+  
+          // Check if the content item has an img property
+          if (contentItem.img && contentItem.img.startsWith('http')) {
+            const existingImageId = contentItem.img.split('/').pop().split('.')[0]; // Get existing public ID
+            const existingFolder = contentItem.img.split('/')[6]; // Get the folder from the URL
+  
+            // If there's a new image to replace, destroy the old one
+            if (existingBlog.contents[i]?.img && existingBlog.contents[i].img !== contentItem.img) {
+              await cloudinary.uploader.destroy(`${existingFolder}/${existingImageId}`);
+              
+              // Upload new image for the content
+              const newImage = await cloudinary.uploader.upload(contentItem.img, { folder: "blogs" });
+              contents[i].img = newImage.secure_url; // Update the img field in contents with the new image URL
+            }
+          }
         }
-
-        // Handle image updates
-        if (existingBlog.img && existingBlog.img !== img) {
-            // Delete old image from Cloudinary
-            const publicId = existingBlog.img.split('/').pop().split('.')[0]; // Assuming img URL format
-            await cloudinary.uploader.destroy(`blogs/${publicId}`);
-            
-            // Upload new image to Cloudinary
-            const uploadedImage = await cloudinary.uploader.upload(img, { folder: "blogs" });
-            img = uploadedImage.secure_url; // Update img to the new URL
-        }
-
-        // Update blog
-        const updatedBlog = await Blogs.findByIdAndUpdate(
-            id,
-            {
-                title,
-                categoryName,
-                desc,
-                img,
-                contents,
-                email,
-                updatedAt: new Date(),
-            },
-            { new: true }
-        );
-
-        res.status(200).json({ message: 'Blog updated successfully', blog: updatedBlog });
+      }
+  
+      // Update blog with the new information
+      const updatedBlog = await Blogs.findByIdAndUpdate(
+        id,
+        {
+          title,
+          categoryName,
+          desc,
+          img,
+          contents, // Use the updated contents array
+          email,
+          updatedAt: new Date(),
+        },
+        { new: true }
+      );
+  
+      res.status(200).json({ message: 'Blog updated successfully', blog: updatedBlog });
     } catch (error) {
-        console.error('Error updating blog:', error);
-        res.status(500).json({ message: 'Internal server error' });
+      console.error('Error updating blog:', error);
+      res.status(500).json({ message: 'Internal server error' });
     }
-});
+  });
+  
+  
 
 // Delete a blog
 router.post('/deleteblog', async (req, res) => {
