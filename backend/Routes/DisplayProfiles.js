@@ -20,10 +20,13 @@ router.post('/usersprofile', async (req, res) => {
         const db = mongoClient.db('mydatabase');
         const profilesCollection = db.collection("profiles");
         const email = req.body.email;
-        if (!email) {
-            return res.status(400).json({ message: "Email is required" });
+
+        let profiles
+        if (email) {
+            profiles = await profilesCollection.find({ email: { $ne: email } }).toArray();
+        } else {
+            profiles = await profilesCollection.find({}).toArray(); // Fetch all profiles if no email
         }
-        const profiles = await profilesCollection.find({ email: { $ne: email } }).toArray();
         res.json(profiles);
     } catch (error) {
         console.error(error.message);
