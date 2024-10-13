@@ -15,12 +15,13 @@ app.use((req, res, next) => {
 });
 
 // Middleware to parse JSON and URL-encoded data
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
 
 // Optional: Uncomment if you plan to use local uploads
 // app.use('/images', express.static('uploads'));
-
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ limit: '50mb', extended: true }));
 app.get('/', async (req, res) => {
     res.send("Hello World");
 });
