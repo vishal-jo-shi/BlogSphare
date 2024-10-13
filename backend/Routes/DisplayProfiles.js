@@ -13,9 +13,6 @@ cloudinary.config({
 
 router.post('/usersprofile', async (req, res) => {
     try {
-        if (!req.body.email) {
-            return res.status(400).json({ message: "Email is required" });
-        }
         const mongoClient = await clientPromise;
         const db = mongoClient.db('mydatabase');
         const profilesCollection = db.collection("profiles");
