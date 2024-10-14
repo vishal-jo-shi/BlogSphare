@@ -63,7 +63,7 @@ router.post('/createblog', async (req, res) => {
             title,
             categoryName,
             desc,
-            img: uploadedImage.secure_url, // Save Cloudinary URL
+            img, // Save Cloudinary URL
             contents,
             email,
             createdAt,
